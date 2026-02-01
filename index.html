@@ -2,64 +2,71 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Walentynka 💖</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 body {
+    margin: 0;
+    height: 100vh;
     background: linear-gradient(135deg, #ff9a9e, #fad0c4);
     font-family: 'Comic Sans MS', cursive;
-    text-align: center;
-    min-height: 100vh;
-    margin: 0;
     overflow: hidden;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 15px;
 }
 
 h1 {
     color: #fff;
     font-size: clamp(1.8rem, 5vw, 3rem);
     text-shadow: 2px 2px #ff4d6d;
-    max-width: 95%;
-    margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 img {
-    margin: 15px 0;
-    border-radius: 20px;
-    box-shadow: 0 0 25px rgba(255,255,255,0.8);
     max-width: 80vw;
     height: auto;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(255,255,255,0.8);
+    margin: 10px 0;
 }
 
 #buttons {
-    margin-top: 25px;
-    position: relative;
+    margin-top: 20px;
     width: 100%;
-    height: 120px;
+    max-width: 320px;
+    height: 140px;
+    position: relative;
 }
 
 button {
-    font-size: 1.4em;
+    font-size: 1.4rem;
     padding: 15px 35px;
     border-radius: 40px;
     border: none;
     cursor: pointer;
-    transition: 0.2s ease;
 }
 
 #yes {
     background: #ff4d6d;
     color: white;
     box-shadow: 0 0 20px #ff4d6d;
+    animation: pulse 1.5s infinite;
 }
 
-#yes:hover {
-    transform: scale(1.1);
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
 #no {
@@ -69,11 +76,27 @@ button {
 }
 
 #message {
-    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
     color: white;
-    margin-top: 25px;
-    display: none;
     text-shadow: 0 0 10px #ff4d6d;
+    margin-top: 20px;
+    display: none;
+}
+
+/* hearts */
+.heart {
+    position: fixed;
+    top: -20px;
+    font-size: 24px;
+    animation: fall 4s linear infinite;
+    opacity: 0.8;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh);
+        opacity: 0;
+    }
 }
 </style>
 </head>
@@ -82,7 +105,7 @@ button {
 
 <h1>Emilia Kargul czy zostaniesz moja walentynka pls pls pls????</h1>
 
-<img id="startImg" src="serce.gif" width="300">
+<img id="startImg" src="serce.gif">
 
 <div id="buttons">
     <button id="yes">TAK 💖</button>
@@ -91,34 +114,30 @@ button {
 
 <div id="message">Yaaaayyy</div>
 
-<img id="loveImg" src="pusheen-yay.gif" width="300" style="display:none;">
+<img id="loveImg" src="pusheen-yay.gif" style="display:none;">
 
 <script>
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
 
-function moveNoButton() {
-    const padding = 20;
-    const btnWidth = noBtn.offsetWidth;
-    const btnHeight = noBtn.offsetHeight;
+function moveNo() {
+    if (navigator.vibrate) navigator.vibrate(60);
 
-    const maxX = window.innerWidth - btnWidth - padding;
-    const maxY = window.innerHeight - btnHeight - padding;
+    const padding = 10;
+    const w = noBtn.offsetWidth;
+    const h = noBtn.offsetHeight;
 
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
+    const maxX = window.innerWidth - w - padding;
+    const maxY = window.innerHeight - h - padding;
 
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
 }
 
-/* DESKTOP */
-noBtn.addEventListener("mouseover", moveNoButton);
-
-/* MOBILE */
-noBtn.addEventListener("touchstart", (e) => {
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("touchstart", e => {
     e.preventDefault();
-    moveNoButton();
+    moveNo();
 });
 
 yesBtn.addEventListener("click", () => {
@@ -126,8 +145,24 @@ yesBtn.addEventListener("click", () => {
     document.getElementById("startImg").style.display = "none";
     document.getElementById("message").style.display = "block";
     document.getElementById("loveImg").style.display = "block";
+    spawnHearts();
 });
+
+function spawnHearts() {
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = Math.random() * 20 + 20 + "px";
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 4000);
+    }, 300);
+}
 </script>
 
 </body>
 </html>
+
+
