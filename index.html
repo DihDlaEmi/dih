@@ -120,8 +120,14 @@ button {
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
 
+function vibrate() {
+    try {
+        navigator.vibrate(80);
+    } catch(e){}
+}
+
 function moveNo() {
-    if (navigator.vibrate) navigator.vibrate(60);
+    vibrate();
 
     const padding = 10;
     const w = noBtn.offsetWidth;
@@ -134,10 +140,14 @@ function moveNo() {
     noBtn.style.top = Math.random() * maxY + "px";
 }
 
+/* DESKTOP */
 noBtn.addEventListener("mouseover", moveNo);
+
+/* iPHONE */
 noBtn.addEventListener("touchstart", e => {
     e.preventDefault();
-    moveNo();
+    vibrate();
+    setTimeout(moveNo, 10);
 });
 
 yesBtn.addEventListener("click", () => {
@@ -162,7 +172,9 @@ function spawnHearts() {
 }
 </script>
 
+
 </body>
 </html>
+
 
 
